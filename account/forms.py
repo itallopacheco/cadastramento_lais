@@ -1,32 +1,32 @@
-import dateutil.utils
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from dateutil.relativedelta import relativedelta
 from cpf_field.forms import CPFFieldForm
 from django.utils.datetime_safe import date
 from django.contrib.auth import authenticate
 
+from account.models import Account, GrupoAtendimento
 
-from account.models import Account, grupos_atendimento
 
 class RegistrationForm(UserCreationForm):
-
     nome_completo = forms.CharField(max_length=255, help_text="Insira seu nome completo.")
     cpf = CPFFieldForm()
     data_nascimento = forms.DateField(help_text="Insira sua data de nascimento")
-    grupos_atendimento = forms.ModelMultipleChoiceField(queryset=grupos_atendimento.objects.all().filter(visivel= True),
-                        label='grupo_atendimento', help_text="grupos de atendimento", widget=forms.SelectMultiple)
+    grupos_atendimento = forms.ModelMultipleChoiceField(queryset=GrupoAtendimento.objects.all().filter(visivel=True)
+                                                        , label='grupo_atendimento', help_text="grupos de atendimento",
+                                                        widget=forms.SelectMultiple)
     covid_recente = forms.BooleanField(help_text="Teve covid nos ultimos 30 dias ?", initial=False, required=False)
 
     class Meta:
         model = Account
-        fields = ('nome_completo', 'cpf', 'data_nascimento', 'grupos_atendimento', 'covid_recente', 'password1', 'password2')
+        fields = ('nome_completo', 'cpf', 'data_nascimento', 'grupos_atendimento',
+                  'covid_recente', 'password1', 'password2')
+
 
     def clean_nome_completo(self):
         nome_completo = self.cleaned_data.get('nome_completo')
         if any(char.isdigit() for char in nome_completo):
             msg = "O nome não pode conter dígitos."
-            self.add_error('nome_completo',msg)
+            self.add_error('nome_completo', msg)
         return nome_completo
 
     def clean_data_nascimento(self):
@@ -40,15 +40,15 @@ class RegistrationForm(UserCreationForm):
         cpf = self.cleaned_data.get('cpf')
         if Account.objects.filter(cpf=cpf).exists():
             msg = "O CPF inserido já é cadastrado."
-            self.add_error('cpf',msg)
+            self.add_error('cpf', msg)
         return cpf
 
     def clean_covid_recente(self):
         covid_recente = self.cleaned_data.get('covid_recente')
         return covid_recente
 
-class AccountAuthenticationForm(forms.ModelForm):
 
+class AccountAuthenticationForm(forms.ModelForm):
     password = forms.CharField(label="Senha", widget=forms.PasswordInput)
 
     class Meta:

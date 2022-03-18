@@ -5,7 +5,7 @@ from account.models import Account, grupos_atendimento
 # Register your models here.
 
 class AccountAdmin(UserAdmin):
-    list_display = ('nome_completo', 'cpf', 'get_grupos', 'covid_recente', 'date_joined', 'is_admin', 'is_staff')
+    list_display = ('nome_completo', 'cpf', 'get_grupos_sipni', 'covid_recente', 'date_joined', 'is_admin', 'is_staff')
     search_fields = ('cpf', 'nome_completo','grupo_atendimento')
     readonly_fields = ('id', 'date_joined',)
 
@@ -26,7 +26,7 @@ admin.site.register(Account, AccountAdmin)
 @admin.register(grupos_atendimento)
 class grupos_atendimento(admin.ModelAdmin):
     list_filter = ('nome',)
-    list_display = ('nome',)
+    list_display = ('nome', 'id')
     search_fields = ('nome',)
     ordering = ('nome',)
     filter_horizontal = ()

@@ -78,9 +78,18 @@ class Account(AbstractBaseUser):
     def has_module_perms(self, app_label):
         return True
 
-    def get_idade(self):
+    @property
+    def idade(self):
         today = date.today()
         return today.year - self.data_nascimento.year - ((today.month, today.day) < (self.data_nascimento.month, self.data_nascimento.day))
+    @property
+    def get_grupos_sipni(self):
+        return "\n".join([a.codigo_si_pni for a in self.grupo_atendimento.all()])
 
+    @property
     def get_grupos(self):
         return "\n".join([a.nome for a in self.grupo_atendimento.all()])
+
+    @property
+    def able_to_schedule(self):
+        return self.get_grupos_sipni not in ['001101', '000205', '001501'] and self.idade > 18 and not self.covid_recente

@@ -6,6 +6,7 @@ from account.models import Account, grupos_atendimento
 
 
 def register_view(request, *args, **kwargs):
+    form = RegistrationForm()
     user = request.user
     if user.is_authenticated:
         return redirect('home')

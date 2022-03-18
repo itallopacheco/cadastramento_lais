@@ -8,9 +8,11 @@
                   <div class="card-body">
                     <h5 class="card-title">{{ request.user.nome_completo }}</h5>
                     <h6 class="card-subtitle mb-2 text-muted">Informações pessoais</h6>
-                    <p class="card-text">Data de Nascimento: {{ request.user.data_nascimento }}, {{ request.user.get_idade}} anos</p>
+                    <p class="card-text">Data de Nascimento: {{ request.user.data_nascimento }}, {{ request.user.idade}} anos</p>
                     <p class="card-text">CPF: {{ request.user.cpf }}</p>
-                    <p class="card-text">Apto para o agendamento: </p>
+                    <p class="card-text">Covid nos ultimos 30 dias : {{ request.user.covid_recente }}</p>
+                    <p class="card-text">Grupos de atendimento: {{ request.user.get_grupos}}</p>
+                    <p class="card-text">Apto para o agendamento: {{ request.user.able_to_schedule }}  </p>
 
                   </div>
                  </div>

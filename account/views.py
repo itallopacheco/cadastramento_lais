@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import login, authenticate, logout
 from account.forms import RegistrationForm, AccountAuthenticationForm
-from account.models import Account, grupos_atendimento
+from account.models import Account, GrupoAtendimento
 
 
 def register_view(request, *args, **kwargs):
@@ -10,13 +10,21 @@ def register_view(request, *args, **kwargs):
     if user.is_authenticated:
         return redirect('home')
 
-
-    objectlist = grupos_atendimento.objects.all()
-    context={'objectlist': objectlist}
-    if request.POST:
+    objectlist = GrupoAtendimento.objects.all()
+    context = {'objectlist': objectlist}
+    if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
-            form.save()
+            usuario = form.save(commit=False)
+            grupo_atendimento = form.cleaned_data.get('grupos_atendimento')
+
+            users = Account.objects.filter(grupos_atendimento__in=grupo_atendimento)
+
+            for users in users:
+                form.grupos_atendimento.add(users)
+
+            usuario.save()
+            form.save_m2m()
             nome_completo = form.cleaned_data.get('nome_completo')
             cpf = form.cleaned_data.get('cpf')
             data_nascimento = form.cleaned_data.get('data_nascimento')

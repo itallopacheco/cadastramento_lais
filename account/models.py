@@ -38,7 +38,7 @@ class AccountManager(BaseUserManager):
         return user
 
 
-class grupos_atendimento(models.Model):
+class GrupoAtendimento(models.Model):
     nome = models.CharField(max_length=150, verbose_name="nome grupo atendimento")
     visivel = models.BooleanField(default=True, blank=True,null=True, verbose_name="visibilidade")
     fase = models.CharField(max_length=15, blank=True, null=True, default="000")
@@ -56,7 +56,7 @@ class Account(AbstractBaseUser):
     nome_completo                   = models.CharField(max_length=150, verbose_name="nome completo")
     cpf                             = CPFField(unique=True, verbose_name='cpf',)
     data_nascimento                 = models.DateField(verbose_name="data de nascimento")
-    grupo_atendimento               = models.ManyToManyField(grupos_atendimento, related_name='account',blank=True, verbose_name="grupo atendimento")
+    grupos_atendimento              = models.ManyToManyField(GrupoAtendimento, related_name='account', blank=True, verbose_name="grupo atendimento")
     covid_recente                   = models.BooleanField(verbose_name="teve covid recentemente")
     date_joined                     = models.DateTimeField(verbose_name="data de cadastro", auto_now_add=True)
     is_admin                        = models.BooleanField(default=False)
@@ -67,7 +67,7 @@ class Account(AbstractBaseUser):
     objects = AccountManager()
 
     USERNAME_FIELD = 'cpf'
-    REQUIRED_FIELDS = ['nome_completo','data_nascimento','covid_recente']
+    REQUIRED_FIELDS = ['nome_completo', 'data_nascimento', 'covid_recente']
 
     def __str__(self):
         return self.nome_completo
@@ -78,9 +78,18 @@ class Account(AbstractBaseUser):
     def has_module_perms(self, app_label):
         return True
 
-    def get_idade(self):
+    @property
+    def idade(self):
         today = date.today()
         return today.year - self.data_nascimento.year - ((today.month, today.day) < (self.data_nascimento.month, self.data_nascimento.day))
+    @property
+    def get_grupos_sipni(self):
+        return "\n".join([a.codigo_si_pni for a in self.grupos_atendimento.all()])
 
+    @property
     def get_grupos(self):
-        return "\n".join([a.nome for a in self.grupo_atendimento.all()])
+        return "\n".join([a.nome for a in self.grupos_atendimento.all()])
+
+    @property
+    def able_to_schedule(self):
+        return self.get_grupos_sipni not in ['001101', '000205', '001501'] and self.idade > 18 and not self.covid_recente

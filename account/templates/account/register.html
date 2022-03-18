@@ -36,7 +36,7 @@
 	<div class="row justify-content-center">
 		<div class="card card-signin">
 		  <div class="card-body">
-		    <form class="form-signin" method="post">{% csrf_token %}
+		    <form class="form-signin" action="{% url 'register' %}" method="post">{% csrf_token %}
 				<input type="text" name="nome_completo" id="inputName" class="form-control" placeholder="Nome completo" required >
 
 				<input type="text" name="cpf" id="inputCpf" class="form-control" placeholder="Cpf" required>

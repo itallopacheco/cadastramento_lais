@@ -3,7 +3,18 @@
 {% block content %}
     <div class="container">
         <div class="d-flex flex-row">
+            {% if request.user.is_authenticated %}
+                <div class="card" style="width: 18rem;">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ request.user.nome_completo }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Informações pessoais</h6>
+                    <p class="card-text">Data de Nascimento: {{ request.user.data_nascimento }}, {{ request.user.get_idade}} anos</p>
+                    <p class="card-text">CPF: {{ request.user.cpf }}</p>
+                    <p class="card-text">Apto para o agendamento: </p>
 
+                  </div>
+                 </div>
+            {% endif %}
         </div>
 
     </div>

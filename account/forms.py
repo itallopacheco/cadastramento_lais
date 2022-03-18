@@ -31,10 +31,9 @@ class RegistrationForm(UserCreationForm):
 
     def clean_data_nascimento(self):
         data_nascimento = self.cleaned_data.get('data_nascimento')
-        idade = relativedelta(date.today(), data_nascimento).years
-        if idade < 18:
-            msg ="Você precisa ser maior de 18 anos para se cadastrar no sistema."
-            self.add_error('data_nascimento', msg)
+        if data_nascimento > date.today():
+            msg2 = "Adicione uma data de nascimento válida."
+            self.add_error('data_nascimento', msg2)
         return data_nascimento
 
     def clean_cpf(self):

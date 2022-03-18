@@ -43,8 +43,8 @@
 
                 <input type="date" name="data_nascimento" id="inputDateBirth" class="form-control"  required>
 
-                <select name="grupos_atendimento" id="inputGrupos"  class="form-control" required>
-                    {% for element in objectList %}
+                <select name="grupos_atendimento" id="inputGrupos"  class="form-control" multiple="" >
+                    {% for element in objectlist %}
                         <option value="{{ element.id }}">{{ element.nome }}</option>
                     {% endfor %}
 

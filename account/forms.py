@@ -14,7 +14,8 @@ class RegistrationForm(UserCreationForm):
     nome_completo = forms.CharField(max_length=255, help_text="Insira seu nome completo.")
     cpf = CPFFieldForm()
     data_nascimento = forms.DateField(help_text="Insira sua data de nascimento")
-    grupos_atendimento = forms.ModelChoiceField(queryset=grupos_atendimento.objects.all(), label='grupo_atendimento', help_text="grupos de atendimento")
+    grupos_atendimento = forms.ModelMultipleChoiceField(queryset=grupos_atendimento.objects.all().filter(visivel= True),
+                        label='grupo_atendimento', help_text="grupos de atendimento", widget=forms.CheckboxSelectMultiple)
     covid_recente = forms.BooleanField(help_text="Teve covid nos ultimos 30 dias ?", initial=False, required=False)
 
     class Meta:

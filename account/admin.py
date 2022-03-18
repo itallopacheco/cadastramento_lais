@@ -5,12 +5,11 @@ from account.models import Account, grupos_atendimento
 # Register your models here.
 
 class AccountAdmin(UserAdmin):
-    list_display = ('nome_completo', 'cpf', 'grupo_atendimento', 'covid_recente', 'date_joined', 'is_admin', 'is_staff')
+    list_display = ('nome_completo', 'cpf', 'get_grupos', 'covid_recente', 'date_joined', 'is_admin', 'is_staff')
     search_fields = ('cpf', 'nome_completo','grupo_atendimento')
     readonly_fields = ('id', 'date_joined',)
 
     ordering = ('cpf',)
-    search_fields = ('cpf',)
 
     filter_horizontal = ()
     list_filter = ()

@@ -56,7 +56,7 @@ class Account(AbstractBaseUser):
     nome_completo                   = models.CharField(max_length=150, verbose_name="nome completo")
     cpf                             = CPFField(unique=True, verbose_name='cpf',)
     data_nascimento                 = models.DateField(verbose_name="data de nascimento")
-    grupo_atendimento               = models.ForeignKey(grupos_atendimento, blank=True, null=True, on_delete=models.SET_NULL, verbose_name="grupo atendimento")
+    grupo_atendimento               = models.ManyToManyField(grupos_atendimento, related_name='account',blank=True, verbose_name="grupo atendimento")
     covid_recente                   = models.BooleanField(verbose_name="teve covid recentemente")
     date_joined                     = models.DateTimeField(verbose_name="data de cadastro", auto_now_add=True)
     is_admin                        = models.BooleanField(default=False)
@@ -81,3 +81,6 @@ class Account(AbstractBaseUser):
     def get_idade(self):
         today = date.today()
         return today.year - self.data_nascimento.year - ((today.month, today.day) < (self.data_nascimento.month, self.data_nascimento.day))
+
+    def get_grupos(self):
+        return "\n".join([a.nome for a in self.grupo_atendimento.all()])

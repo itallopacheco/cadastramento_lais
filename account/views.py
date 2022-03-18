@@ -8,11 +8,11 @@ from account.models import Account, grupos_atendimento
 def register_view(request, *args, **kwargs):
     user = request.user
     if user.is_authenticated:
-        return HttpResponse(str(user.nome_completo) +", voce ja esta autenticado.")
+        return redirect('home')
 
 
     objectlist = grupos_atendimento.objects.all()
-    context = {'objectList':objectlist}
+    context={'objectlist': objectlist}
     if request.POST:
         form = RegistrationForm(request.POST)
         if form.is_valid():
@@ -24,18 +24,14 @@ def register_view(request, *args, **kwargs):
             covid_recente = form.cleaned_data.get('covid_recente')
             password = form.cleaned_data.get('password1')
             account = authenticate(nome_completo=nome_completo, cpf=cpf, data_nascimento=data_nascimento,
-                                   grupos_atendimento=grupos_atendimento,
-                                   covid_recente=covid_recente,
+                                   grupos_atendimento=grupo_atendimento,covid_recente=covid_recente,
                                    password=password)
             login(request, account)
-            destination = kwargs.get("next")
-            if destination:
-                return redirect(destination)
-            return redirect("home")
+            return redirect('home')
         else:
             context['registration_form'] = form
 
-    return render(request, 'account/register.html', context)
+    return render(request, 'account/register.html',context )
 
 def logout_view(request):
     logout(request)

@@ -16,12 +16,6 @@ def register_view(request, *args, **kwargs):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             usuario = form.save(commit=False)
-            grupo_atendimento = form.cleaned_data.get('grupos_atendimento')
-
-            users = Account.objects.filter(grupos_atendimento__in=grupo_atendimento)
-
-            for users in users:
-                form.grupos_atendimento.add(users)
 
             usuario.save()
             form.save_m2m()

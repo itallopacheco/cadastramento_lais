@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     # my apps
     'personal',
     'account',
+    'agendamento',
 
     # 3rd party
     'cpf_field'

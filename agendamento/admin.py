@@ -2,6 +2,7 @@ from django.contrib import admin
 from agendamento.models import Estabelecimento, Agendamento, Agendamento_Account
 # Register your models here.
 
+
 @admin.register(Estabelecimento)
 class EstabelecimentoAdmin(admin.ModelAdmin):
     list_filter = ('cnes', 'nome')
@@ -10,6 +11,7 @@ class EstabelecimentoAdmin(admin.ModelAdmin):
     ordering = ('nome',)
     filter_horizontal = ()
     fieldsets = ()
+
 
 @admin.register(Agendamento)
 class AgendamentoAdmin(admin.ModelAdmin):

@@ -2,6 +2,7 @@ from django.db import models
 from account.models import Account
 from datetime import date
 from django.utils.timezone import localtime
+from agendamento.choices import *
 # Create your models here.
 
 class Estabelecimento(models.Model):
@@ -15,7 +16,7 @@ class Estabelecimento(models.Model):
 
 class Agendamento(models.Model):
     estabelecimento = models.ForeignKey(Estabelecimento, on_delete=models.CASCADE, verbose_name='Estabelecimento')
-    data_agendamento = models.DateField(verbose_name='Data Agendamento')
+    data_agendamento = models.DateField(verbose_name='Data Agendamento',)
     account = models.ManyToManyField(Account, through='Agendamento_Account')
 
     def __str__(self):
@@ -38,16 +39,22 @@ class Agendamento(models.Model):
 class Agendamento_Account(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
     agendamento = models.ForeignKey(Agendamento, on_delete=models.CASCADE)
-    hora = models.TimeField(default='00:00', verbose_name='Hora do agendamento')
-    is_active = models.BooleanField(verbose_name='esta ativo', default=True, null=False)
+    hora = models.TimeField(auto_now=False, auto_now_add=False,default='00:00', verbose_name='Hora do agendamento',
+                            choices=HORA_CHOICES,
+                            )
+    is_active = models.BooleanField(verbose_name='esta ativo', default=False, null=False)
 
     @property
     def status(self):
-        if date.today() == self.agendamento.data_agendamento and localtime().time() > self.hora:
+        data_agendamento = self.agendamento.data_agendamento
+        if date.today() == data_agendamento and localtime().time() > self.hora:
+            self.is_active = False
             return 'Encerrado'
         else:
-            if date.today() > self.agendamento.data_agendamento:
+            if date.today() > data_agendamento:
+                self.is_active = False
                 return 'Encerrado'
+        self.is_active = True
         return 'Ativo'
 
     @property

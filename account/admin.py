@@ -24,7 +24,7 @@ class AccountAdmin(UserAdmin):
 admin.site.register(Account, AccountAdmin)
 
 @admin.register(GrupoAtendimento)
-class grupos_atendimento(admin.ModelAdmin):
+class GrupoAtendimento(admin.ModelAdmin):
     list_filter = ('nome',)
     list_display = ('nome', 'id')
     search_fields = ('nome',)

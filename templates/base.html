@@ -9,6 +9,21 @@
 <body>
 {% include 'snippets/header.html' %}
 
+
+    {% if messages %}
+  <div class="row">
+  <div class="col-sm-6 col-sm-offset-3">
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+          <p>{{ message }}</p>
+      </div>
+      {% endfor %}
+    </div>
+
+  </div>
+{% endif %}
+
+
     <style type="text/css">
         .main{
             min-height: 100vh;

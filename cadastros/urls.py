@@ -27,6 +27,9 @@ from account.views import (
     login_view,
     logout_view,
 )
+from agendamento.views import (
+    agendamento_view,
+)
 
 
 urlpatterns = [
@@ -34,7 +37,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('register/', register_view, name="register"),
     path('login/', login_view, name="login"),
-    path('logout', logout_view, name="logout")
+    path('logout', logout_view, name="logout"),
+    path('agendamento', agendamento_view, name='agendamento'),
 
 ]
 if settings.DEBUG:

@@ -2,7 +2,7 @@ from django import forms
 from django.utils.datetime_safe import date
 from django.contrib.auth import authenticate
 from agendamento.choices import *
-from agendamento.models import Agendamento,Agendamento_Account, Estabelecimento
+from agendamento.models import Agendamento, Estabelecimento
 
 
 class AgendamentoForm(forms.ModelForm):
@@ -13,7 +13,7 @@ class AgendamentoForm(forms.ModelForm):
     class Meta:
         model = Agendamento
         fields = ('estabelecimento', 'data_agendamento', 'hora')
-'''
+
     def clean_data_agendamento(self):
         data_agendamento = self.cleaned_data.get('data_agendamento')
         data_hoje = date.today()
@@ -24,4 +24,3 @@ class AgendamentoForm(forms.ModelForm):
             msg2 = "Só é possível marcar exames de quarta-feira ao sábado"
             self.add_error('data_agendamento', msg2)
         return data_agendamento
-'''

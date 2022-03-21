@@ -17,7 +17,11 @@ class Estabelecimento(models.Model):
 class Agendamento(models.Model):
     estabelecimento = models.ForeignKey(Estabelecimento, on_delete=models.CASCADE, verbose_name='Estabelecimento')
     data_agendamento = models.DateField(verbose_name='Data Agendamento',)
-    account = models.ManyToManyField(Account, through='Agendamento_Account')
+    account = models.ManyToManyField(Account)
+    hora = models.TimeField(auto_now=False, auto_now_add=False, default='00:00', verbose_name='Hora do agendamento',
+                            choices=HORA_CHOICES,
+                            )
+    is_active = models.BooleanField(verbose_name='esta ativo', default=False, null=False)
 
     def __str__(self):
         return f"{self.estabelecimento.nome}, {self.data_agendamento}, {self.dia_extenso}"
@@ -35,18 +39,9 @@ class Agendamento(models.Model):
         agendamento = dias_semana[self.data_agendamento.weekday()]
         return agendamento
 
-
-class Agendamento_Account(models.Model):
-    account = models.ForeignKey(Account, on_delete=models.CASCADE)
-    agendamento = models.ForeignKey(Agendamento, on_delete=models.CASCADE)
-    hora = models.TimeField(auto_now=False, auto_now_add=False,default='00:00', verbose_name='Hora do agendamento',
-                            choices=HORA_CHOICES,
-                            )
-    is_active = models.BooleanField(verbose_name='esta ativo', default=False, null=False)
-
     @property
     def status(self):
-        data_agendamento = self.agendamento.data_agendamento
+        data_agendamento = self.data_agendamento
         if date.today() == data_agendamento and localtime().time() > self.hora:
             self.is_active = False
             return 'Encerrado'
@@ -56,17 +51,3 @@ class Agendamento_Account(models.Model):
                 return 'Encerrado'
         self.is_active = True
         return 'Ativo'
-
-    @property
-    def dia_extenso(self):
-
-        dias_semana = {0: 'Segunda-Feira',
-                       1: 'Terça-Feira',
-                       2: 'Quarta-Feira',
-                       3: 'Quinta-Feira',
-                       4: 'Sexta-Feira',
-                       5: 'Sábado',
-                       6: 'Domingo'}
-
-        agendamento = dias_semana[self.agendamento.data_agendamento.weekday()]
-        return agendamento

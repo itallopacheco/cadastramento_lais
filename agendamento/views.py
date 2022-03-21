@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from agendamento.models import Agendamento, Estabelecimento, Agendamento_Account
+from agendamento.models import Agendamento, Estabelecimento
 from django.contrib.auth import authenticate
 from agendamento.choices import *
 from django.contrib.messages import constants as messages, add_message
@@ -12,7 +12,7 @@ from datetime import date
 @login_required(redirect_field_name='home')
 def agendamento_view(request, *args, **kwargs):
     user = request.user
-    a = Agendamento_Account.objects.filter(account=request.user, is_active=True)
+    a = Agendamento.objects.filter(account=request.user, is_active=True)
     estabelecimentos = Estabelecimento.objects.all()
 
     horario = HORA_CHOICES

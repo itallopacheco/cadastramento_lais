@@ -1,5 +1,5 @@
 from django.contrib import admin
-from agendamento.models import Estabelecimento, Agendamento, Agendamento_Account
+from agendamento.models import Estabelecimento, Agendamento
 # Register your models here.
 
 
@@ -16,17 +16,8 @@ class EstabelecimentoAdmin(admin.ModelAdmin):
 @admin.register(Agendamento)
 class AgendamentoAdmin(admin.ModelAdmin):
     list_filter = ('estabelecimento', 'data_agendamento', 'account')
-    list_display = ('id', 'estabelecimento', 'data_agendamento', 'dia_extenso',)
-    search_fields = ('estabelecimento', 'data_agendamento',)
+    list_display = ('estabelecimento', 'data_agendamento', 'dia_extenso', 'hora')
+    search_fields = ('estabelecimento', 'data_agendamento','hora')
     ordering = ('estabelecimento',)
-    filter_horizontal = ()
-    fieldsets = ()
-
-@admin.register(Agendamento_Account)
-class Agendamento_Account(admin.ModelAdmin):
-    list_filter = ('account', 'agendamento', 'hora', 'is_active')
-    list_display = ('account', 'agendamento', 'hora', 'is_active', 'status')
-    search_fields = ('account',)
-    ordering = ('account',)
     filter_horizontal = ()
     fieldsets = ()

@@ -40,19 +40,11 @@
             
                 <select name="estabelecimento" id="inputEstabelecimento"  class="form-control">
                     {% for estabelecimento in estabelecimentos %}
-                        <option value="{{ estabelecimento.id }}">{{ estabelecimento.nome }}</option>
+                        <option value="{{ estabelecimento.id }}">{{ estabelecimento.nome }} {{ estabelecimento.cnes }}</option>
                     {% endfor %}
                 </select>
 
                 <input type="date" name="data_agendamento" id="inputDataAgendamento" class="form-control"  required>
-                <select name="horario" id="inputHorario"  class="form-control">
-                    {% for key, horario in horarios %}
-                        <option value="{{ key }}">{{ horario}}</option>
-                    {% endfor %}
-                </select>
-
-
-
 
 				{% for field in registration_form %}
 				<p>
@@ -68,8 +60,24 @@
 
 				{% endif %}
 
-				<button class="btn btn-lg btn-primary btn-block" type="submit">Agendar</button>
+				<button class="btn btn-lg btn-primary btn-block" type="submit">Buscar Horarios</button>
             </form>
+                <form class="form-signin" action="">{% csrf_token %}
+                    <select name="horario" id="inputHorario" class="form-control">
+                        {% for horario,key in horarios %}
+                            <option value="{{ key }}">{{ horario }}</option>
+                        {% endfor %}
+
+                    </select>
+                </form>
+
+                {% for horario in horarios %}
+                    {% for key,hora in horario.items %}
+                        <p>{{ key }} {{ hora }}</p>
+                       {% endfor %}
+                {% endfor %}
+
+
 
 		  </div>
 		</div>

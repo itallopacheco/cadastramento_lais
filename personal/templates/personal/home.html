@@ -2,7 +2,7 @@
 
 {% block content %}
     <div class="container">
-        <div class="d-flex flex-row  ">
+        <div class="d-flex flex-row m-2  ">
             {% if request.user.is_authenticated %}
                 <div class="card" style="width: 18rem;">
                   <div class="card-body">
@@ -18,9 +18,9 @@
             {% endif %}
         </div>
             {% if request.user.is_authenticated %}
-                <div class="d-flex flex-row">
+                <div class="d-flex flex-row flex-wrap">
                     {% for agendamento in agendamentos %}
-                        <div class="card" style="width: 18rem">
+                        <div class="card m-2" style="width: 20rem ">
                             <div class="card-body">
                                 <h5 class="card-title">
                                     {{ agendamento.estabelecimento.cnes}} -

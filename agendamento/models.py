@@ -3,6 +3,7 @@ from account.models import Account
 from datetime import date
 from django.utils.timezone import localtime
 from agendamento.choices import *
+from django.core.validators import MinValueValidator
 # Create your models here.
 
 class Estabelecimento(models.Model):
@@ -16,7 +17,7 @@ class Estabelecimento(models.Model):
 
 class Agendamento(models.Model):
     estabelecimento = models.ForeignKey(Estabelecimento, on_delete=models.CASCADE, verbose_name='Estabelecimento')
-    data_agendamento = models.DateField(verbose_name='Data Agendamento',)
+    data_agendamento = models.DateField(verbose_name='Data Agendamento',validators=[MinValueValidator(limit_value=date.today())])
     account = models.ManyToManyField(Account)
     hora = models.TimeField(auto_now=False, auto_now_add=False, default='00:00', verbose_name='Hora do agendamento',
                             choices=HORA_CHOICES,

@@ -42,11 +42,11 @@ class Agendamento(models.Model):
     def status(self):
         data_agendamento = self.data_agendamento
         if date.today() == data_agendamento and localtime().time() > self.hora:
-            return 'Encerrado'
+            return 'Expirado'
         else:
             if date.today() > data_agendamento:
-                return 'Encerrado'
-        return 'Ativo'
+                return 'Expirado'
+        return 'Marcado'
 
     @property
     def is_active(self):

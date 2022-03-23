@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth import login, authenticate, logout
 from account.forms import RegistrationForm, AccountAuthenticationForm
 from account.models import Account, GrupoAtendimento
+from django.contrib.messages import constants as messages, add_message
 
 
 def register_view(request, *args, **kwargs):
@@ -28,6 +29,7 @@ def register_view(request, *args, **kwargs):
             account = authenticate(nome_completo=nome_completo, cpf=cpf, data_nascimento=data_nascimento,
                                    grupos_atendimento=grupo_atendimento,covid_recente=covid_recente,
                                    password=password)
+            add_message(request,messages.INFO,"Usuario criado com sucesso!")
             login(request, account)
             return redirect('home')
         else:

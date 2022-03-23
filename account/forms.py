@@ -13,12 +13,12 @@ class RegistrationForm(UserCreationForm):
     data_nascimento = forms.DateField(help_text="Insira sua data de nascimento")
     grupos_atendimento = forms.ModelMultipleChoiceField(queryset=GrupoAtendimento.objects.all().filter(visivel=True)
                                                         , label='grupo_atendimento', help_text="grupos de atendimento",
-                                                        widget=forms.SelectMultiple)
+                                                        widget=forms.CheckboxSelectMultiple)
     covid_recente = forms.BooleanField(help_text="Teve covid nos ultimos 30 dias ?", initial=False, required=False)
 
     class Meta:
         model = Account
-        fields = ('nome_completo', 'cpf', 'data_nascimento', 'grupos_atendimento',
+        fields = ('nome_completo', 'cpf', 'data_nascimento',
                   'covid_recente', 'password1', 'password2')
 
 

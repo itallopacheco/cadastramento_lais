@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container" >
+    <div class="d-none d-md-flex flex-row my-auto flex-grow-1 align-items-center">
+        <canvas id="myChart" max-width="400" max-height="400"></canvas>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    {% block jquery %}
+        <script>
+            var endpoint = 'administrativo/data'
+            var defaultData = []
+            var labels = []
+            $.ajax({
+                method: "GET",
+                url: endpoint,
+                success: function (data){
+                    labels = data.labels
+                    defaultData = data.data
+
+                    const ctx = document.getElementById('myChart');
+                    const myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data:{
+                            labels:labels,
+                            datasets: [{
+                                label: '# de agendamentos',
+                                data: defaultData,
+                            }]
+                        }
+                    })
+                },
+                error: function (error_data){
+                    console.log("error")
+                    console.log(error_data)
+                }
+            })
+        </script>
+    {% endblock jquery %}
+
+
+
+{% endblock content %}

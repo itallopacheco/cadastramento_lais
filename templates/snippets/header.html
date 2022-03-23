@@ -14,6 +14,10 @@
     <div class="d-flex flex-row-reverse flex-grow-1"  >
         {% if request.user.is_authenticated %}
             <div class="btn-group" role="group" aria-label="Basic example">
+                {% if request.user.is_admin %}
+                    <a class="btn btn-success" href="{% url 'adminstrativo' %}">Painel Administrativo</a>
+                {% endif %}
+
                 {% if request.user.able_to_schedule %}
                     <a class="btn btn-primary" href="{% url 'agendamento' %}">Agende</a>
                 {% endif %}

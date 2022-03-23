@@ -19,7 +19,9 @@ from django.conf.urls.static import static
 from django.urls import path
 
 from personal.views import (
-    home_view
+    home_view,
+    administrativo_view,
+    get_data
 )
 
 from account.views import (
@@ -40,7 +42,8 @@ urlpatterns = [
     path('login/', login_view, name="login"),
     path('logout', logout_view, name="logout"),
     path('agendamento', agendamento_view, name='agendamento'),
-
+    path('administrativo', administrativo_view, name="adminstrativo"),
+    path('administrativo/data', get_data, name="administrativo/data"),
     path('ajax/load-horas', load_horas, name='ajax_load_horas'),
 
 ]

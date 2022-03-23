@@ -13,20 +13,10 @@
 	  margin: auto;
   }
 
-  .form-signin input[type="email"] {
-    margin-bottom: 10px;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
-  }
   .form-signin input[type="text"] {
     margin-bottom: 10px;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
-  }
-  .form-signin input[type="password"] {
-    margin-bottom: -1px;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
   }
 
 
@@ -36,7 +26,7 @@
 	<div class="row justify-content-center">
 		<div class="card card-agendamento">
 		  <div class="card-body">
-		    <form class="form-signin" action="{% url 'agendamento' %}" method="post">{% csrf_token %}
+		    <form class="form-signin" data-horas-url="{% url 'ajax_load_horas' %}" id="agendamentoForm"  method="post">{% csrf_token %}
             
                 <select name="estabelecimento" id="inputEstabelecimento"  class="form-control">
                     {% for estabelecimento in estabelecimentos %}
@@ -44,7 +34,14 @@
                     {% endfor %}
                 </select>
 
-                <input type="date" name="data_agendamento" id="inputDataAgendamento" class="form-control"  required>
+                <input id="inputDataAgendamento" type="date" name="data_agendamento"    required>
+
+                <select name="horario" id="inputHorario" class="form-control">
+                        {% for horario,key in horarios %}
+                            <option value="{{ key }}">{{ horario }}</option>
+                        {% endfor %}
+
+                    </select>
 
 				{% for field in registration_form %}
 				<p>
@@ -62,35 +59,33 @@
 
 				<button class="btn btn-lg btn-primary btn-block" type="submit">Buscar Horarios</button>
             </form>
-                <form class="form-signin" action="">{% csrf_token %}
-                    <select name="horario" id="inputHorario" class="form-control">
-                        {% for horario,key in horarios %}
-                            <option value="{{ key }}">{{ horario }}</option>
-                        {% endfor %}
-
-                    </select>
-                </form>
-
-                {% for horario in horarios %}
-                    {% for key,hora in horario.items %}
-                        <p>{{ key }} {{ hora }}</p>
-                       {% endfor %}
-                {% endfor %}
-
-
-
 		  </div>
 		</div>
 
 	</div>
 </div>
-<script>
-    $(document).ready(function (){
-        $("inputHorario").datepicker();
-    })
-</script>
 
+
+    <script>
+        $("#inputDataAgendamento").change(function () {
+        var url = $("#agendamentoForm").attr("data-horas-url");  // get the url of the `load_cities` view
+        var dateId = $(this).val();
+        var estabelecimentoID = $("#inputEstabelecimento").val();
+        console.log(estabelecimentoID);// get the selected country ID from the HTML input
+        $.ajax({                       // initialize an AJAX request
+            url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+            data: {
+            'data_agendamento': dateId,
+            'estabelecimento': estabelecimentoID// add the country id to the GET parameters
+            },
+            success: function (data) {   // `data` is the return of the `load_cities` view function
+            $("#inputHorario").html(data);  // replace the contents of the city input with the data that came from the server
+            }
+        });
+    });
+  </script>
 
 
 
 {% endblock content %}
+

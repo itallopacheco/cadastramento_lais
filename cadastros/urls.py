@@ -29,6 +29,7 @@ from account.views import (
 )
 from agendamento.views import (
     agendamento_view,
+    load_horas,
 )
 
 
@@ -39,6 +40,8 @@ urlpatterns = [
     path('login/', login_view, name="login"),
     path('logout', logout_view, name="logout"),
     path('agendamento', agendamento_view, name='agendamento'),
+
+    path('ajax/load-horas', load_horas, name='ajax_load_horas'),
 
 ]
 if settings.DEBUG:

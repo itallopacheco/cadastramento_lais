@@ -24,7 +24,6 @@ def agendamento_view(request, *args, **kwargs):
     if a: #checa se a pessoa tem agendamentos ativos
         add_message(request, messages.WARNING, 'Não pode ter mais de um agendamento ativo')
         return redirect('home')
-
     if request.method == 'POST':
         form = AgendamentoForm(request.POST)
         if form.is_valid():
@@ -65,3 +64,28 @@ def agendamento_view(request, *args, **kwargs):
                                                                             'horarios': horario})
 
 
+def load_horas(request):
+    estabelecimento = request.GET.get('estabelecimento')
+    data_agendamento = request.GET.get('data_agendamento')
+    print(f"LOAD_HORAS {estabelecimento}, {data_agendamento}")
+    horario = ()
+    agendamentos = Agendamento.objects.filter(estabelecimento=estabelecimento,
+                                           data_agendamento=data_agendamento)
+    horario_ocupado = [(0, 0)]
+    if agendamentos.filter(hora='13:00').count() >= 5:
+        horario_ocupado.append(time(13, 00, 00))
+    if agendamentos.filter(hora='14:00').count() >= 5:
+        horario_ocupado.append(time(14, 00, 00))
+
+    if agendamentos.filter(hora='15:00').count() >= 5:
+        horario_ocupado.append(time(15, 00, 00))
+
+    if agendamentos.filter(hora='16:00').count() >= 5:
+        horario_ocupado.append(time(16, 00, 00))
+
+    if agendamentos.filter(hora='17:00').count() >= 5:
+        horario_ocupado.append(time(17, 00, 00))
+
+    horario = [x for x in HORA_CHOICES if x[0] not in horario_ocupado]
+
+    return render(request, 'agendamento/agendamento_choices.html', {'horarios': horario})

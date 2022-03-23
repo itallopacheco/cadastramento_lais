@@ -2,11 +2,15 @@
 
 {% block content %}
     <div class="container" >
-    <div class="d-none d-md-flex flex-row my-auto flex-grow-1 align-items-center">
-        <canvas id="myChart" max-width="400" max-height="400"></canvas>
+        <div class="d-none d-md-flex flex-row my-auto flex-grow-1 align-items-center">
+            <canvas id="myChart" max-width="400" max-height="400"></canvas>
+        </div>
     </div>
-</div>
-
+    <div class="container" >
+        <div class="d-none d-md-flex flex-row my-auto flex-grow-1 align-items-center">
+            <canvas id="pieChart" max-width="400" max-height="400"></canvas>
+        </div>
+    </div>
 
 
 
@@ -34,13 +38,14 @@
                     labels = data.labels
                     defaultData = data.data
 
-                    const ctx = document.getElementById('myChart');
-                    const myChart = new Chart(ctx, {
+
+                    const myChart = new Chart(
+                        document.getElementById('myChart'), {
                         type: 'bar',
                         data:{
                             labels:labels,
                             datasets: [{
-                                label: '# de agendamentos',
+                                label: 'quantidade de agendamentos',
                                 data: defaultData,
                             }]
                         }
@@ -52,6 +57,43 @@
                 }
             })
         </script>
+
+        <script>
+            var endpoint2 = 'administrativo/data/chart2'
+            var defaultData2 = []
+            var labels2 = []
+            $.ajax({
+                method: "GET",
+                url: endpoint2,
+                success: function (data) {
+                    labels2 = data.labels
+                    defaultData2 = data.data
+                    console.log(defaultData2)
+
+                    const pieChart = new Chart(
+                        document.getElementById('pieChart'),{
+                            type: 'pie',
+                            data: {
+                                labels: ['Aptos', 'Inaptos'],
+                                datasets: [{
+                                    label: 'Aptos x Inaptos',
+                                    data: defaultData2,
+                                    backgroundColor : ['green','red'],
+                                }]
+                            },
+                            options: {
+                                responsive: true
+                            }
+                        }
+                    );
+
+
+                }
+            })
+
+        </script>
+
+
     {% endblock jquery %}
 
 

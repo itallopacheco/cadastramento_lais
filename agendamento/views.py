@@ -61,7 +61,7 @@ def agendamento_view(request, *args, **kwargs):
            context['registration_form'] = form
 
     return render(request, 'agendamento/agendamento_form.html', context={'estabelecimentos':estabelecimentos,
-                                                                            'horarios': horario})
+                                                                           })
 
 
 def load_horas(request):
@@ -71,6 +71,8 @@ def load_horas(request):
     horario = ()
     agendamentos = Agendamento.objects.filter(estabelecimento=estabelecimento,
                                            data_agendamento=data_agendamento)
+    account = Account.objects.filter(id=request.user.id).first()
+
     horario_ocupado = [(0, 0)]
     if agendamentos.filter(hora='13:00').count() >= 5:
         horario_ocupado.append(time(13, 00, 00))
@@ -86,6 +88,20 @@ def load_horas(request):
     if agendamentos.filter(hora='17:00').count() >= 5:
         horario_ocupado.append(time(17, 00, 00))
 
-    horario = [x for x in HORA_CHOICES if x[0] not in horario_ocupado]
+    horario_permitido = []
+    if account.idade in range(18,29,1):
+        horario_permitido.append(time(13, 00, 00))
+    elif account.idade in range(30,39,1):
+        horario_permitido.append(time(14, 00, 00))
+    elif account.idade in range(40,49,1):
+        horario_permitido.append(time(15, 00, 00))
+    elif account.idade in range(50, 59, 1):
+        horario_permitido.append(time(16, 00, 00))
+    else:
+        horario_permitido.append(time(15,00,00))
+
+
+    horarios_disponiveis = [x for x in HORA_CHOICES if x[0] not in horario_ocupado]
+    horario = [x for x in horarios_disponiveis if x[0] in horario_permitido]
 
     return render(request, 'agendamento/agendamento_choices.html', {'horarios': horario})

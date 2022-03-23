@@ -26,7 +26,7 @@
 	<div class="row justify-content-center">
 		<div class="card card-agendamento">
 		  <div class="card-body">
-		    <form class="form-signin" data-horas-url="{% url 'ajax_load_horas' %}" id="agendamentoForm"  method="post">{% csrf_token %}
+		    <form class="form-signin" data-horas-url="{% url 'ajax_load_horas' %}" id="agendamentoForm"  action="{% url 'agendamento' %}" method="post">{% csrf_token %}
             
                 <select name="estabelecimento" id="inputEstabelecimento"  class="form-control">
                     {% for estabelecimento in estabelecimentos %}
@@ -57,7 +57,7 @@
 
 				{% endif %}
 
-				<button class="btn btn-lg btn-primary btn-block" type="submit">Buscar Horarios</button>
+				<button class="btn btn-lg btn-primary btn-block" type="submit">Agemdar</button>
             </form>
 		  </div>
 		</div>

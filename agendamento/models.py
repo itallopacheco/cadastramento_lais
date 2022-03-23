@@ -22,8 +22,6 @@ class Agendamento(models.Model):
     hora = models.TimeField(auto_now=False, auto_now_add=False, default='00:00', verbose_name='Hora do agendamento',
                             choices=HORA_CHOICES,
                             )
-    is_active = models.BooleanField(verbose_name='esta ativo', default=False, null=False)
-
     def __str__(self):
         return f"{self.estabelecimento.nome}, {self.data_agendamento}, {self.dia_extenso}"
 
@@ -44,11 +42,19 @@ class Agendamento(models.Model):
     def status(self):
         data_agendamento = self.data_agendamento
         if date.today() == data_agendamento and localtime().time() > self.hora:
-            self.is_active = False
             return 'Encerrado'
         else:
             if date.today() > data_agendamento:
-                self.is_active = False
                 return 'Encerrado'
-        self.is_active = True
         return 'Ativo'
+
+    @property
+    def is_active(self):
+        data_agendamento = self.data_agendamento
+        hora_agendamento = self.hora
+        if date.today() > data_agendamento:
+            return False
+        elif date.today() == data_agendamento and hora_agendamento < localtime().time():
+            return False
+        else:
+            return True
